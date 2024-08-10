@@ -66,8 +66,56 @@ Before getting started, ensure you have the following:
 
 ### 5.1 Write the Lambda Function Code
 
-Create your Lambda function using the .NET Core 8 runtime. Ensure the code is designed to handle S3 events, parse CSV files, and interact with DynamoDB. For more details on writing the Lambda function code, consult the [AWS Lambda documentation](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html).
+To create the Lambda function for processing CSV files from S3 and inserting records into DynamoDB, follow these steps:
 
+#### **Configuring the S3 Trigger**
+
+1. **Navigate to AWS Lambda Console**:
+   - Open the [AWS Management Console](https://aws.amazon.com/console/).
+   - Go to the **Lambda** service.
+
+2. **Select Your Lambda Function**:
+   - Find and click on the Lambda function you created (e.g., `S3CsvToDynamoDBLambda`).
+
+3. **Add an S3 Trigger**:
+   - In the Lambda function configuration page, scroll down to the **Designer** section.
+   - Click on **Add trigger**.
+   - From the list of trigger sources, select **S3**.
+
+4. **Configure S3 Trigger Settings**:
+   - **Bucket**: Choose the S3 bucket where you will upload CSV files (e.g., `customer-data-bucket-unique-id`).
+   - **Event type**: Select `PUT` to trigger the Lambda function whenever a new file is uploaded to the bucket.
+   - **Prefix and Suffix (optional)**: If you want to trigger the Lambda function only for files with specific names or paths, you can specify a prefix or suffix. For example, if you want to process only CSV files, you might use `.csv` as a suffix.
+   - **Enabled**: Ensure this checkbox is selected to activate the trigger.
+
+5. **Add the Trigger**:
+   - Click on **Add** to complete the trigger configuration.
+
+6. **Save Changes**:
+   - Click **Save** to apply the new trigger settings to your Lambda function.
+
+#### **Setting Up SQS as Dead Letter Queue (DLQ)**
+
+1. **Navigate to AWS SQS Console**:
+   - Open the [AWS Management Console](https://aws.amazon.com/console/).
+   - Go to the **SQS** service.
+
+2. **Create an SQS Queue** (if not already created):
+   - Click on **Create queue**.
+   - Choose **Standard** as the type.
+   - Enter a **Name** for your queue (e.g., `LambdaDLQ`).
+   - Configure other settings as required.
+   - Click **Create Queue**.
+
+3. **Configure the Lambda Function for DLQ**:
+   - Go back to the **Lambda Console** and select your Lambda function.
+   - In the function configuration page, scroll down to the **Asynchronous invocation** section.
+   - Click on **Edit** next to the Dead-letter queue section.
+   - Select **SQS** from the options.
+   - Choose the SQS queue you created earlier (`LambdaDLQ`).
+
+4. **Save DLQ Configuration**:
+   - Click **Save** to apply the DLQ settings.
 ### 5.2 Create a ZIP File for the Lambda Deployment
 
 1. Build the project in **Release** mode using your C# IDE.
