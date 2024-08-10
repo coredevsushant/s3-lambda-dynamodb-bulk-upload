@@ -66,6 +66,22 @@ Before getting started, ensure you have the following:
 
 ### 5.1 Write the Lambda Function Code
 
+Create your Lambda function using the .NET Core 8 runtime. Ensure the code is designed to handle S3 events, parse CSV files, and interact with DynamoDB. For more details on writing the Lambda function code, consult the [AWS Lambda documentation](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html).
+
+### 5.2 Create a ZIP File for the Lambda Deployment
+
+1. Build the project in **Release** mode using your C# IDE.
+2. Package the build output into a ZIP file containing all necessary binaries and dependencies.
+
+### 5.3 Upload the ZIP File to Lambda
+
+1. Go back to the **Lambda Console**.
+2. In the **Code** tab, click on **Upload from** and select **.zip file**.
+3. Choose the ZIP file you created.
+4. Click **Save** to deploy the function.
+
+## Step 6: Set Up S3 Event Trigger for Lambda
+
 To create the Lambda function for processing CSV files from S3 and inserting records into DynamoDB, follow these steps:
 
 #### **Configuring the S3 Trigger**
@@ -94,7 +110,7 @@ To create the Lambda function for processing CSV files from S3 and inserting rec
 6. **Save Changes**:
    - Click **Save** to apply the new trigger settings to your Lambda function.
 
-#### **Setting Up SQS as Dead Letter Queue (DLQ)**
+## Step 7: Configure Lambda DLQ
 
 1. **Navigate to AWS SQS Console**:
    - Open the [AWS Management Console](https://aws.amazon.com/console/).
@@ -116,38 +132,9 @@ To create the Lambda function for processing CSV files from S3 and inserting rec
 
 4. **Save DLQ Configuration**:
    - Click **Save** to apply the DLQ settings.
-### 5.2 Create a ZIP File for the Lambda Deployment
-
-1. Build the project in **Release** mode using your C# IDE.
-2. Package the build output into a ZIP file containing all necessary binaries and dependencies.
-
-### 5.3 Upload the ZIP File to Lambda
-
-1. Go back to the **Lambda Console**.
-2. In the **Code** tab, click on **Upload from** and select **.zip file**.
-3. Choose the ZIP file you created.
-4. Click **Save** to deploy the function.
-
-## Step 6: Set Up S3 Event Trigger for Lambda
-
-1. Go to the **Lambda Console** for your function.
-2. Click on **Add trigger** under the **Designer** section.
-3. Select **S3** as the trigger type.
-4. Choose your **S3 bucket**.
-5. Configure the event type (e.g., `PUT`) and specify a prefix or suffix if needed.
-6. Click **Add** to complete the trigger setup.
-
-## Step 7: Configure Lambda DLQ
-
-1. In the **Lambda Console**, navigate to the **Function configuration** tab.
-2. Scroll down to the **Asynchronous invocation** section.
-3. Under **Dead-letter queue**, select **SQS** and choose the DLQ you created earlier (`LambdaDLQ`).
-4. Save the changes.
 
 ## Step 8: Test the Setup
 
 1. **Upload a CSV file** with customer data to your S3 bucket.
 2. Monitor the Lambda function execution and DynamoDB table to ensure records are processed and inserted correctly.
 3. Check the DLQ for any failed messages.
-
-For further assistance, refer to the [AWS Documentation](https://docs.aws.amazon.com/) or consult with AWS support.
