@@ -112,25 +112,14 @@ To create the Lambda function for processing CSV files from S3 and inserting rec
 
 ## Step 7: Configure Lambda DLQ
 
-1. **Navigate to AWS SQS Console**:
-   - Open the [AWS Management Console](https://aws.amazon.com/console/).
-   - Go to the **SQS** service.
-
-2. **Create an SQS Queue** (if not already created):
-   - Click on **Create queue**.
-   - Choose **Standard** as the type.
-   - Enter a **Name** for your queue (e.g., `LambdaDLQ`).
-   - Configure other settings as required.
-   - Click **Create Queue**.
-
-3. **Configure the Lambda Function for DLQ**:
+1. **Configure the Lambda Function for DLQ**:
    - Go back to the **Lambda Console** and select your Lambda function.
    - In the function configuration page, scroll down to the **Asynchronous invocation** section.
    - Click on **Edit** next to the Dead-letter queue section.
    - Select **SQS** from the options.
    - Choose the SQS queue you created earlier (`LambdaDLQ`).
 
-4. **Save DLQ Configuration**:
+2. **Save DLQ Configuration**:
    - Click **Save** to apply the DLQ settings.
 
 ## Step 8: Test the Setup
