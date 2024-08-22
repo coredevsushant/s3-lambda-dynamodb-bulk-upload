@@ -2,6 +2,8 @@
 
 This guide provides a detailed, step-by-step walkthrough for configuring bulk uploads from S3 to Lambda to DynamoDB with error handling via a Dead Letter Queue (DLQ) using Amazon SQS. The process is implemented using the AWS Console and C#, targeting .NET Core 8. The Lambda function will parse a CSV file containing customer data, convert the data into JSON, and perform bulk uploads to DynamoDB. All resources will be created in the Mumbai region.
 
+![AWS Beginner](AWS%20Beginners.png "AWS Beginner")
+
 ## Prerequisites
 
 Before getting started, ensure you have the following:
