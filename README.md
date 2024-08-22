@@ -72,8 +72,8 @@ Create your Lambda function using the .NET Core 8 runtime. Ensure the code is de
 
 ### 5.2 Create a ZIP File for the Lambda Deployment
 
-1. Build the project in **Release** mode using your C# IDE.
-2. Package the build output into a ZIP file containing all necessary binaries and dependencies.
+1. Run following command where your csproj file is stored in command prompt
+`dotnet lambda package *.csproj -o bin/package.zip`
 
 ### 5.3 Upload the ZIP File to Lambda
 
