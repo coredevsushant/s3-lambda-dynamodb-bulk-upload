@@ -126,6 +126,6 @@ To create the Lambda function for processing CSV files from S3 and inserting rec
 
 ## Step 8: Test the Setup
 
-1. **Upload a CSV file** with customer data to your S3 bucket.
+1. **[Upload a CSV file](customer_data.csv "Upload a CSV file")** with customer data to your S3 bucket.
 2. Monitor the Lambda function execution and DynamoDB table to ensure records are processed and inserted correctly.
 3. Check the DLQ for any failed messages.
