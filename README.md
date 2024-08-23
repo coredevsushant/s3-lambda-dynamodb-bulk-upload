@@ -114,8 +114,21 @@ Create your Lambda function using the .NET Core 8 runtime. Ensure the code is de
 
 ### 5.2 Create a ZIP File for the Lambda Deployment
 
-1. Run following command where your csproj file is stored in command prompt
-`dotnet lambda package *.csproj -o bin/package.zip`
+1. Install Amazon.Lambda.Tools Global Tools if not already installed.
+```
+    dotnet tool install -g Amazon.Lambda.Tools
+```
+
+If already installed check if new version is available.
+```
+    dotnet tool update -g Amazon.Lambda.Tools
+```
+
+2. Run following command where your csproj file is stored in command prompt
+   
+```
+dotnet lambda package *.csproj -o bin/package.zip
+```
 
 ### 5.3 Upload the ZIP File to Lambda
 
@@ -123,6 +136,14 @@ Create your Lambda function using the .NET Core 8 runtime. Ensure the code is de
 2. In the **Code** tab, click on **Upload from** and select **.zip file**.
 3. Choose the ZIP file you created.
 4. Click **Save** to deploy the function.
+
+#### Edit Runtime Settings
+
+5. After the upload, navigate to the **Runtime settings** section under the **Code** tab.
+6. **Set the Handler**:
+   - Enter the handler as `"S3toDynamodb-BulkUpload::S3toDynamodb_BulkUpload.Function::FunctionHandler"`.
+7. **Save Changes**:
+   - Click **Save** to apply the new handler settings.
 
 ## Step 6: Set Up S3 Event Trigger for Lambda
 
