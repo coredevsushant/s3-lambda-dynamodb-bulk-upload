@@ -67,7 +67,7 @@ Before setting up your Lambda function, you need to create an IAM role with the 
      - `AmazonS3ReadOnlyAccess` - To read from the S3 bucket.
      - `AmazonDynamoDBFullAccess` - To perform batch writes to DynamoDB.
      - `AmazonSQSFullAccess` - To send messages to the DLQ in case of errors.
-     - `CloudWatchLogsFullAccess` - For logging Lambda function execution details.
+     - `AWSLambdaBasicExecutionRole` - For logging Lambda function execution details.
    - Click **Next**.
 
 5. **Name the Role**:
