@@ -19,7 +19,7 @@ Before getting started, ensure you have the following:
 1. **Login to AWS Console**.
 2. Navigate to the **S3** service.
 3. Click on **Create bucket**.
-4. Provide a **Unique Bucket Name** (e.g., `customer-data-bucket-unique-id`) and choose the **Asia Pacific (Mumbai) ap-south-1** region.
+4. Provide a **Unique Bucket Name** (e.g., `customer-data-bucket-<unique-id>`) and choose the **Asia Pacific (Mumbai) ap-south-1** region.
 5. Adjust any settings (like versioning, encryption) as per your needs, and click **Create bucket**.
 
 ## Step 2: Create a DynamoDB Table
@@ -43,26 +43,68 @@ Before getting started, ensure you have the following:
 
 ### Permissions Setup
 
-1. **IAM Role**: Create or use an existing IAM role with the following permissions:
-   - **S3 Full Access**: To read from the S3 bucket.
-   - **DynamoDB Full Access**: To perform batch writes to DynamoDB.
-   - **SQS SendMessage**: To send messages to the DLQ in case of errors.
-   - **CloudWatch Logs**: For logging Lambda function execution details.
+### 1. Create IAM Role for Lambda
 
-   Attach the following policies to your IAM role:
-   - `AmazonS3FullAccess`
-   - `AmazonDynamoDBFullAccess`
-   - `AmazonSQSFullAccess`
-   - `CloudWatchLogsFullAccess`
+Before setting up your Lambda function, you need to create an IAM role with the necessary permissions.
 
-2. Navigate to **Lambda** in the AWS Console.
-3. Ensure the **Region** is set to **Asia Pacific (Mumbai) ap-south-1**.
-4. Click on **Create function**.
-5. Choose **Author from scratch**.
-6. Enter a **Function name** (e.g., `S3CsvToDynamoDBLambda`).
-7. Select **.NET Core 8** as the runtime.
-8. Under **Permissions**, choose the IAM role you configured earlier.
-9. Click **Create function**.
+#### Step-by-Step Guide to Create IAM Role:
+
+1. **Navigate to IAM**:
+   - Open the [AWS Management Console](https://aws.amazon.com/console/).
+   - Go to the **IAM** service.
+
+2. **Create a New Role**:
+   - In the IAM dashboard, click on **Roles** in the left-hand menu.
+   - Click on **Create role**.
+
+3. **Select Trusted Entity**:
+   - Choose **AWS Service** as the trusted entity.
+   - Under **Use case**, select **Lambda**.
+   - Click **Next** to proceed.
+
+4. **Attach Permissions**:
+   - Search for and select the following policies:
+     - `AmazonS3FullAccess` - To read from the S3 bucket.
+     - `AmazonDynamoDBFullAccess` - To perform batch writes to DynamoDB.
+     - `AmazonSQSFullAccess` - To send messages to the DLQ in case of errors.
+     - `CloudWatchLogsFullAccess` - For logging Lambda function execution details.
+   - Click **Next**.
+
+5. **Name the Role**:
+   - Enter a name for your role, e.g., `LambdaExecutionRoleForS3ToDynamoDB`.
+   - Review the role settings and click **Create role**.
+
+6. **Attach Role to Lambda**:
+   - This role will be selected during the Lambda function creation process.
+
+### 2. Create the Lambda Function
+
+Now that you have the IAM role set up, you can create the Lambda function.
+
+#### Step-by-Step Guide to Create Lambda Function:
+
+1. **Navigate to Lambda**:
+   - Open the [AWS Management Console](https://aws.amazon.com/console/).
+   - Go to the **Lambda** service.
+
+2. **Set the Region**:
+   - Ensure the **Region** is set to **Asia Pacific (Mumbai) ap-south-1**.
+
+3. **Create a New Lambda Function**:
+   - Click on **Create function**.
+
+4. **Choose How to Create the Function**:
+   - Select **Author from scratch**.
+
+5. **Configure Function Settings**:
+   - **Function name**: Enter a name for your function, e.g., `S3CsvToDynamoDBLambda`.
+   - **Runtime**: Choose **.NET Core 8** as the runtime.
+
+6. **Set Permissions**:
+   - Under **Permissions**, choose the IAM role you created earlier (`LambdaExecutionRoleForS3ToDynamoDB`).
+
+7. **Create the Function**:
+   - Click **Create function** to finalize the setup.
 
 ## Step 5: Create and Upload the Lambda Function Code
 
@@ -101,7 +143,7 @@ To create the Lambda function for processing CSV files from S3 and inserting rec
    - From the list of trigger sources, select **S3**.
 
 4. **Configure S3 Trigger Settings**:
-   - **Bucket**: Choose the S3 bucket where you will upload CSV files (e.g., `customer-data-bucket-unique-id`).
+   - **Bucket**: Choose the S3 bucket where you will upload CSV files (e.g., `customer-data-bucket-<unique-id>`).
    - **Event type**: Select `PUT` to trigger the Lambda function whenever a new file is uploaded to the bucket.
    - **Prefix and Suffix (optional)**: If you want to trigger the Lambda function only for files with specific names or paths, you can specify a prefix or suffix. For example, if you want to process only CSV files, you might use `.csv` as a suffix.
    - **Enabled**: Ensure this checkbox is selected to activate the trigger.
