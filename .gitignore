@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/S3toDynamodb-BulkUpload/.vs
+/S3toDynamodb-BulkUpload/bin
+/S3toDynamodb-BulkUpload/obj

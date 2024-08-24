@@ -1,0 +1,6 @@
+customerId,firstname,lastname,phonenumber,address
+1,John,Doe,+919876543210,"123 Main St, Mumbai, MH"
+2,Jane,Smith,+919812345678,"456 Elm St, Pune, MH"
+3,David,Johnson,+919987654321,"789 Oak St, Bengaluru, KA"
+4,Alice,Williams,+919876512340,"101 Pine St, Delhi, DL"
+5,Robert,Brown,+919876503456,"202 Maple St, Chennai, TN"
