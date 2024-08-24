@@ -5,6 +5,9 @@ using Amazon.Lambda.S3Events;
 using Amazon.S3;
 using Amazon.S3.Model;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Text;
+using ThirdParty.Json.LitJson;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
@@ -44,24 +47,27 @@ public class Function
                 Expression = "SELECT * FROM S3Object s",
                 InputSerialization = new InputSerialization
                 {
-                    CSV = new CSVInput { FileHeaderInfo = FileHeaderInfo.Use }
+                    CSV = new CSVInput { FileHeaderInfo = FileHeaderInfo.Use, }
                 },
                 OutputSerialization = new OutputSerialization { JSON = new JSONOutput() }
             };
 
             var selectResponse = await _s3Client.SelectObjectContentAsync(selectRequest);
+            List<Customer> list = new();
+            using (var stream = selectResponse.Payload)
+                foreach (var ev in stream)
+                    if (ev is RecordsEvent records)
+                        using (var reader = new StreamReader(records.Payload, Encoding.UTF8))
+                            while (!reader.EndOfStream)
+                            {
+                                var line = await reader.ReadLineAsync();
+                                Console.WriteLine($"Input data: {line}");
+                                var data = JsonConvert.DeserializeObject<Customer>(line);
+                                list.Add(data);
+                            }
+            if (list.Any())
+                WriteBatchToDynamoDB(list);
 
-            using var stream = selectResponse.Payload;
-            if (stream is RecordsEvent records)
-                using (var reader = new StreamReader(records.Payload))
-                using (var jsonReader = new JsonTextReader(reader))
-                {
-                    var jsondata = await jsonReader.ReadAsStringAsync();
-                    Console.WriteLine($"Input data: {jsondata}");
-                    var data = JsonConvert.DeserializeObject<List<Customer>>(jsondata);
-                    if (data is not null)
-                        WriteBatchToDynamoDB(data);
-                }
         }
     }
 
@@ -70,6 +76,7 @@ public class Function
         var context = new DynamoDBContext(_dynamoDbClient);
         var bookBatch = context.CreateBatchWrite<Customer>();
         bookBatch.AddPutItems(customers);
+        bookBatch.ExecuteAsync();
     }
 }
 
