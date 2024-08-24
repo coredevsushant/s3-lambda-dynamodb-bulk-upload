@@ -27,8 +27,19 @@ Before getting started, ensure you have the following:
 1. Navigate to **DynamoDB** in the AWS Console.
 2. Ensure the **Region** is set to **Asia Pacific (Mumbai) ap-south-1**.
 3. Click on **Create table**.
-4. Enter a **Table name** and a **Primary key** (e.g., `customerId`).
-5. Configure additional settings like read/write capacity and click **Create**.
+
+4. **Configure Table Settings**:
+   - **Table name**: Enter `CustomerData` as the table name.
+   - **Primary key**: Enter `customerId` as the partition key.
+
+5. **Customize Table Settings**:
+   - **Table class**: Choose `DynamoDB Standard`.
+   - **Read/write capacity settings**: Set to `Provisioned`.
+     - **Read capacity**: Set to Min `1` Max `3`.
+     - **Write capacity**: Set to Min `1` Max `3`.
+
+6. **Create the Table**:
+   - Review your settings and click **Create Table** to finalize the creation.
 
 ## Step 3: Create an SQS Queue for DLQ
 
