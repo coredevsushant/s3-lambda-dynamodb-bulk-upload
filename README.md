@@ -201,5 +201,68 @@ To create the Lambda function for processing CSV files from S3 and inserting rec
 ## Step 8: Test the Setup
 
 1. **[Upload a CSV file](customer_data.csv "Upload a CSV file")** with customer data to your S3 bucket.
-2. Monitor the Lambda function execution and DynamoDB table to ensure records are processed and inserted correctly.
-3. Check the DLQ for any failed messages.
+   - Ensure the CSV file follows the structure specified in the earlier steps.
+   
+2. **Monitor the Lambda Execution**:
+   - Go to the **CloudWatch Logs** in the AWS Console.
+   - Find the log group associated with your Lambda function (e.g., `/aws/lambda/S3CsvToDynamoDBLambda`).
+   - **Check the Logs**:
+     - Verify that the event payload and records are logged correctly.
+     - Ensure that the data is processed without errors.
+
+3. **Validate DynamoDB Insertions**:
+   - Navigate to your DynamoDB table (`CustomerData`).
+   - Check that the records from the CSV file are successfully inserted into the table.
+
+4. **Test Failure Cases**:
+   - **Upload an Invalid File Type**:
+     - Upload a file type other than `.csv` (e.g., `.txt` or `.jpg`) to your S3 bucket.
+   - **Check DLQ**:
+     - Go to the **SQS Console** and check the Dead Letter Queue (DLQ) for any failed messages.
+     - Verify that the invalid file triggered an error and was handled by the DLQ.
+
+5. **Review CloudWatch Logs**:
+   - Return to **CloudWatch Logs** to inspect any error messages related to the failure cases.
+   - Ensure that the logs contain detailed information about the errors encountered.
+
+## Step 9: Clean Up Resources
+
+Once you have completed testing and no longer need the resources, follow these steps to delete them:
+
+1. **Delete the DynamoDB Table**:
+   - Navigate to **DynamoDB** in the AWS Console.
+   - Select the table (`CustomerData`) you created.
+   - Click on **Delete** and confirm the deletion.
+
+2. **Delete the SQS Queue (DLQ)**:
+   - Go to the **SQS** service in the AWS Console.
+   - Select the Dead Letter Queue (`LambdaDLQ`) you created.
+   - Click on **Delete** and confirm the deletion.
+
+3. **Delete the Lambda Function**:
+   - Go to the **Lambda** service in the AWS Console.
+   - Select the function (`S3CsvToDynamoDBLambda`) you created.
+   - Click on **Actions** and choose **Delete**.
+
+4. **Delete the CloudWatch Log Group**:
+   - Navigate to **CloudWatch Logs** in the AWS Console.
+   - Find the log group associated with your Lambda function (e.g., `/aws/lambda/S3CsvToDynamoDBLambda`).
+   - Select the log group and click **Actions** > **Delete log group**.
+
+5. **Delete the S3 Bucket**:
+   - Go to the **S3** service in the AWS Console.
+   - Select the bucket (`customer-data-bucket-unique-id`) you created.
+   - **Delete All Objects**:
+     - Go to the **Objects** tab within your bucket.
+     - Select all objects and click **Delete**.
+   - **Delete the Bucket**:
+     - After clearing the bucket, return to the main bucket list.
+     - Select your bucket and click **Delete**.
+
+6. **Delete the IAM Role**:
+   - Navigate to **IAM** in the AWS Console.
+   - Select **Roles** from the left-hand menu.
+   - Find the role (`LambdaExecutionRoleForS3ToDynamoDB`) you created.
+   - Click **Delete role** and confirm the deletion.
+
+
